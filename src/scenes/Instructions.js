@@ -4,6 +4,24 @@ class Instructions extends Phaser.Scene {
     }
 
     create() {
+        // Check if background music is already playing.
+        let bgMusic = this.sound.get('BGMusic');
+        if (!bgMusic) {
+            // If not found, add and start the background music.
+            this.backgroundMusic = this.sound.add('BGMusic', {
+                loop: true,
+                volume: 0.2
+            });
+            this.backgroundMusic.play();
+        } else if (!bgMusic.isPlaying) {
+            // If found but not playing, start it.
+            bgMusic.play();
+            this.backgroundMusic = bgMusic;
+        } else {
+            // Otherwise, use the existing background music.
+            this.backgroundMusic = bgMusic;
+        }
+
         // Title text
         this.add.text(this.scale.width / 2, 50, 'Instructions', {
             fontFamily: 'JumperGradient',
@@ -41,6 +59,7 @@ Press "Back to Menu" to return.
 
         backText.setInteractive({ useHandCursor: true });
         backText.on('pointerup', () => {
+            this.sound.play('click');
             this.scene.start('menuScene');
         });
     }

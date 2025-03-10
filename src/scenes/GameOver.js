@@ -4,6 +4,24 @@ class GameOver extends Phaser.Scene {
     }
 
     create() {
+        // Check if background music is already playing.
+        let bgMusic = this.sound.get('BGMusic');
+        if (!bgMusic) {
+            // If not found, add and start the background music.
+            this.backgroundMusic = this.sound.add('BGMusic', {
+                loop: true,
+                volume: 0.2
+            });
+            this.backgroundMusic.play();
+        } else if (!bgMusic.isPlaying) {
+            // If found but not playing, start it.
+            bgMusic.play();
+            this.backgroundMusic = bgMusic;
+        } else {
+            // Otherwise, use the existing background music.
+            this.backgroundMusic = bgMusic;
+        }
+
         // Display "Game Over" title text.
         this.add.text(this.scale.width / 2, 200, 'Game Over', {
             fontFamily: 'JumperGradient',
@@ -22,6 +40,7 @@ class GameOver extends Phaser.Scene {
         retryText.setInteractive({ useHandCursor: true });
         retryText.on('pointerup', () => {
             // Restart the play scene.
+            this.sound.play('click');
             this.scene.start('playScene');
         });
 
@@ -36,6 +55,7 @@ class GameOver extends Phaser.Scene {
         menuText.setInteractive({ useHandCursor: true });
         menuText.on('pointerup', () => {
             // Transition to the menu scene.
+            this.sound.play('click');
             this.scene.start('menuScene');
         });
     }

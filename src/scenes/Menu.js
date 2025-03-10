@@ -2,10 +2,25 @@ class Menu extends Phaser.Scene {
     constructor() {
       super('menuScene');
     }
-    preload() {
-        // Load any temporary assets if needed
-    }
     create() {
+        // Check if background music is already playing.
+        let bgMusic = this.sound.get('BGMusic');
+        if (!bgMusic) {
+            // If not found, add and start the background music.
+            this.backgroundMusic = this.sound.add('BGMusic', {
+                loop: true,
+                volume: 0.2
+            });
+            this.backgroundMusic.play();
+        } else if (!bgMusic.isPlaying) {
+            // If found but not playing, start it.
+            bgMusic.play();
+            this.backgroundMusic = bgMusic;
+        } else {
+            // Otherwise, use the existing background music.
+            this.backgroundMusic = bgMusic;
+        }
+
         // Display the game title
         this.add.text(525, 250, 'Light Cycle Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
       
@@ -13,6 +28,7 @@ class Menu extends Phaser.Scene {
         const startText = this.add.text(525, 350, 'Start Game', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
         startText.setInteractive();
         startText.on('pointerdown', () => {
+            this.sound.play('click');
             this.scene.start('playScene');
         });
 
@@ -20,6 +36,7 @@ class Menu extends Phaser.Scene {
         const InstructionsText = this.add.text(525, 450, 'Instructions', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
         InstructionsText.setInteractive();
         InstructionsText.on('pointerdown', () => {
+            this.sound.play('click');
             this.scene.start('instructionsScene');
         });
     }

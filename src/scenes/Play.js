@@ -5,11 +5,34 @@ class Play extends Phaser.Scene {
 
     create(){
         //Stop all music
-        this.sound.stopAll()
+        // this.sound.stopAll()
+
+        // Check if background music is already playing.
+        let bgMusic = this.sound.get('BGMusic');
+        if (!bgMusic) {
+            // If not found, add and start the background music.
+            this.backgroundMusic = this.sound.add('BGMusic', {
+                loop: true,
+                volume: 0.2
+            });
+            this.backgroundMusic.play();
+        } else if (!bgMusic.isPlaying) {
+            // If found but not playing, start it.
+            bgMusic.play();
+            this.backgroundMusic = bgMusic;
+        } else {
+            // Otherwise, use the existing background music.
+            this.backgroundMusic = bgMusic;
+        }
 
         //Background
         this.add.image(400, 215, 'background').setScale(1.6)
 
+        new Countdown(this, this.scale.width / 2, this.scale.height / 2, () => {
+          // Callback when countdown finishes:
+          // Start your game logic here (e.g., enable bike movement, start timers, etc.)
+          console.log('Countdown complete! Starting game...');
+        });
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0)
 
