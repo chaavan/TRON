@@ -1,4 +1,4 @@
-// Game Name: Tron
+// Game Name: Light Cycle
 // Name: Chaavan Sure
 // Date: 3/7/2025
 //Hours Spent: ?? hours
