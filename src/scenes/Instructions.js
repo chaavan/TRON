@@ -34,7 +34,7 @@ class Instructions extends Phaser.Scene {
 Game Instructions:
 
 1. Control your bike using the arrow keys (for one bike) or WASD (for the other).
-2. Your bike will move continuously (like in Snake) – you can only change direction.
+2. Your bike will move continuously (like in Snake) you can only change direction.
 3. Avoid colliding with the light trails left by the bikes.
 4. Beware of hitting world boundaries.
 5. Collect power-ups to boost your performance.

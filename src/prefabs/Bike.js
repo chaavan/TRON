@@ -1,5 +1,5 @@
 class Bike extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, frame) {
+    constructor(scene, x, y, texture, frame, initialDirection, controls) {
       super(scene, x, y, texture, frame);
       scene.add.existing(this);
       scene.physics.add.existing(this);
@@ -9,9 +9,11 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
       this.body.setCollideWorldBounds(true);
   
       // Store the intended starting direction (after countdown)
-      this.initialDirection = 'left';
+      this.initialDirection = initialDirection;
       // Speed at which the bike moves (in pixels per second)
       this.bikeVelocity = 100;
+
+      this.keys = controls;
 
       this.body.onWorldBounds = true;
       // Listen for worldbounds collisions.
@@ -21,7 +23,7 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
 
       // Initialize the bike's state machine.
       // Start in the idle state for the countdown, then transition to the chosen initial direction.
-      scene.bikeFSM = new StateMachine('idle', {
+      this.bikeFSM = new StateMachine('idle', {
         idle: new IdleState(),
         left: new LeftState(),
         right: new RightState(),
@@ -30,11 +32,16 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
         explode: new ExplodeState()
       }, [scene, this]);
     }
+
+    update(){
+      this.bikeFSM.step()
+    }
 }
   
 class IdleState extends State {
     enter(scene, bike) {
       // Stop movement and play idle animation.
+      // bike.setAngle(270);
       bike.setVelocity(0, 0);
       bike.anims.play('idle', true);
   
@@ -65,11 +72,11 @@ class LeftState extends State {
     }
     execute(scene, bike) {
       // While moving left, only allow vertical turns.
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.up)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
         this.stateMachine.transition('up');
         return;
       }
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.down)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
         this.stateMachine.transition('down');
         return;
       }
@@ -86,11 +93,11 @@ class LeftState extends State {
     }
     execute(scene, bike) {
       // While moving right, only allow vertical turns.
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.up)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
         this.stateMachine.transition('up');
         return;
       }
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.down)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
         this.stateMachine.transition('down');
         return;
       }
@@ -99,8 +106,7 @@ class LeftState extends State {
   
   class UpState extends State {
     enter(scene, bike) {
-      bike.body
-      .setSize(this.width/2, this.height)
+      bike.body.setSize(this.width/2, this.height)
       bike.setAngle(0);
       bike.direction = 'up';
       bike.setVelocity(0, -bike.bikeVelocity);
@@ -108,11 +114,11 @@ class LeftState extends State {
     }
     execute(scene, bike) {
       // While moving up, only allow horizontal turns.
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.left)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
         this.stateMachine.transition('left');
         return;
       }
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.right)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
         this.stateMachine.transition('right');
         return;
       }
@@ -128,11 +134,11 @@ class LeftState extends State {
     }
     execute(scene, bike) {
       // While moving down, only allow horizontal turns.
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.left)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
         this.stateMachine.transition('left');
         return;
       }
-      if (Phaser.Input.Keyboard.JustDown(scene.keys.right)) {
+      if (Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
         this.stateMachine.transition('right');
         return;
       }
@@ -148,6 +154,6 @@ class LeftState extends State {
     }
     execute(scene, bike) {
       // Monitor explosion progress if needed.
+      scene.scene.start('gameOverScene')
     }
   }
-  
