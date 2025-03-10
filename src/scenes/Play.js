@@ -74,46 +74,64 @@ class Play extends Phaser.Scene {
         this.updateTrail(delta, this.bike)
         this.updateTrail(delta, this.bike2)
 
-
+        // this.handleCollisionForBike(this.bike)
+        // this.handleCollisionForBike(this.bike2)
 
         // this.handleCollision()
     }
 
-    // handleCollision() {
-    //     // Get the bike's bounding rectangle.
-    //     const bikeBounds = this.bike.getBounds();
-    
-    //     // Check collision between the bike and each trail segment.
-    //     for (let i = 0; i < this.trailSegments.length; i++) {
+    // handleCollisionForBike(bike) {
+    //   // Get the bike's bounding rectangle.
+    //   const bikeBounds = bike.getBounds();
+  
+    //   // Loop through each trail segment.
+    //   for (let i = 0; i < this.trailSegments.length; i++) {
     //       let segment = this.trailSegments[i];
-    //       let segmentBounds = segment.getBounds();
-    //       if (Phaser.Geom.Intersects.RectangleToRectangle(bikeBounds, segmentBounds)) {
-    //         // If collision is detected and the bike is not already exploding,
-    //         // transition its FSM to the 'explode' state.
-    //         // this.bikeFSM.transition('explode');
+    //       // Skip segments that are still in their no-collision grace period.
+    //       if (segment.noCollisionTime > 0) continue;
+    //       // Check for collision using the segment's bounds.
+    //       if (Phaser.Geom.Intersects.RectangleToRectangle(bikeBounds, segment.getBounds())) {
+    //           // If a collision is detected and the bike is not already in an explosion state.
+    //           if (!bike.anims.currentAnim || bike.anims.currentAnim.key !== 'bike-explode') {
+    //               // this.backgroundMusic.stop();
+    //               // this.sound.play('explosionAudio');
+    //               // Transition the bike's state machine to the 'explode' state.
+    //               bike.bikeFSM.transition('explode');
+    //           }
+    //           break;
     //       }
-    //     }
+    //   }
     // }
+  
 
-    updateTrail(delta, biker) {
-        // Accumulate time and create a new trail segment when interval is reached.
-        this.trailTimer += delta;
-        if (this.trailTimer >= this.trailInterval) {
-          const segmentSize = 10; // Adjust size as needed
-          let segment = this.add.rectangle(biker.x, biker.y, segmentSize, segmentSize, 0x00ffff);
+    updateTrail(delta, bike) {
+      // Accumulate time to determine when to create a new trail segment.
+      this.trailTimer += delta;
+      
+      // If enough time has passed, create a new trail segment using the pixel asset.
+      if (this.trailTimer >= this.trailInterval) {
+          const segmentSize = 10; // Adjust the size to cover gaps.
+          // Create a new image from your single-pixel asset.
+          let segment = this.add.image(bike.x, bike.y, 'trail').setOrigin(0.5, 0.5);
+          // Scale the image to the desired segment size.
+          segment.setDisplaySize(segmentSize, segmentSize);
+          // Set lifetime and a short grace period for collision.
           segment.lifetime = this.trailLifetime;
+          segment.noCollisionTime = 100; // 100ms grace period.
           this.trailSegments.push(segment);
           this.trailTimer = 0;
-        }
-    
-        // Update each trail segment's lifetime and remove those that have expired.
-        for (let i = this.trailSegments.length - 1; i >= 0; i--) {
+      }
+      
+      // Update each trail segment's lifetime and the no-collision grace period.
+      for (let i = this.trailSegments.length - 1; i >= 0; i--) {
           let segment = this.trailSegments[i];
           segment.lifetime -= delta;
+          segment.noCollisionTime -= delta;
           if (segment.lifetime <= 0) {
-            segment.destroy();
-            this.trailSegments.splice(i, 1);
+              segment.destroy();
+              this.trailSegments.splice(i, 1);
           }
-        }
       }
+    }
+  
 }
