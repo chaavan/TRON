@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tron</title>
+    <script src="./lib/phaser.js"></script>
+    <script src="./lib/StateMachine.js"></script>
+    <script src="./src/prefabs/Bike.js"></script>
+    <script src="./src/prefabs/Trail.js"></script>
+    <script src="./src/scenes/Load.js"></script>
+    <script src="./src/scenes/Instructions.js"></script>
+    <script src="./src/scenes/Menu.js"></script>
+    <script src="./src/scenes/Play.js"></script>
+    <script src="./src/scenes/GameOver.js"></script>
+    <script src="./src/main.js"></script>
+    <style>
+        /* @font-face {
+            font-family: ;
+            src: url();
+        } */
+        body {
+            /* font-family: 'JumperGradient'; */
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            height: 100vh; 
+            margin: 0;
+            overflow: hidden; 
+            background-color: black;
+        }
+
+        #Game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid white; /* White border */
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Optional glow effect */
+        }
+
+    
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="Game-container"></div>
+</body>
+</html>
