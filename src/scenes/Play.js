@@ -69,7 +69,7 @@ class Play extends Phaser.Scene {
 
         // **Detect Direct Bike Collision**
         this.physics.add.collider(this.bike, this.bike2, () => {
-            this.handleCollision("Both Players Crashed!", this.bike);
+            this.handleCollision("Both Players Crashed!", this.bike, this.bike2);
         }, null, this);
         // Game over flag
         this.gameOver = false;
@@ -128,10 +128,15 @@ class Play extends Phaser.Scene {
         this.powerUpGroup.add(powerUp);
     }
 
-    handleCollision(message, player) {
+    handleCollision(message, player, opponent = null) {
         if (this.collisionOccurred || this.countdownActive || player.invincible ) return; // Ignore if collision already happened
         this.collisionOccurred = true; // Mark collision as occurred
+
         player.bikeFSM.transition("explode")
+        
+        if (opponent) {
+            opponent.bikeFSM.transition("explode");
+        }
 
         this.sound.play("explosion")
         this.time.delayedCall(1000, () => {

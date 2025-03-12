@@ -7,6 +7,8 @@ class GameOver extends Phaser.Scene {
         //Stop all music
         this.sound.stopAll()
         
+        this.add.image(width/2, height/2, 'menu-background')
+
         // Check if background music is already playing.
         let bgMusic = this.sound.get('BGMusic');
         if (!bgMusic) {
@@ -26,11 +28,7 @@ class GameOver extends Phaser.Scene {
         }
 
         // Display "Game Over" title text.
-        this.add.text(this.scale.width / 2, 200, 'Game Over', {
-            fontFamily: 'JumperGradient',
-            fontSize: '64px',
-            fill: '#fff'
-        }).setOrigin(0.5);
+        this.add.bitmapText(525, 150, 'calcio-italiano',  'Game Over', 64).setOrigin(0.5);
 
         // Create a "Retry" button.
         const retryText = this.add.text(this.scale.width / 2, 350, 'Retry', {

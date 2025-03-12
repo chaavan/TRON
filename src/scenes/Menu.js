@@ -7,7 +7,7 @@ class Menu extends Phaser.Scene {
         this.sound.stopByKey("IGMusic");
 
         //Add background image
-        this.add.image(width/2, height/2, 'menu-background', )
+        this.add.image(width/2, height/2, 'menu-background')
 
         // Check if background music is already playing.
         let bgMusic = this.sound.get('BGMusic');
