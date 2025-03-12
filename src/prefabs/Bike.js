@@ -156,5 +156,10 @@ class ExplodeState extends State {
     // Stop movement and play the explosion animation.
     bike.setVelocity(0, 0);
     bike.anims.play('explode');
+    scene
+
+    scene.cameras.main.shake(500, 0.02); // Screen shake effect
+
+    bike.body.checkCollision.none = true;
   }
 }

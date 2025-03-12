@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     create(){
         //Stop all music
-        // this.sound.stopAll()
+        this.sound.stopByKey("BGMusic");
         
         //Background
         this.add.image(400, 215, 'background').setScale(1.6)
@@ -19,21 +19,15 @@ class Play extends Phaser.Scene {
         })
 
         // Check if background music is already playing.
-        let bgMusic = this.sound.get('BGMusic');
+        let bgMusic = this.sound.get("IGMusic");
         if (!bgMusic) {
-            // If not found, add and start the background music.
-            this.backgroundMusic = this.sound.add('BGMusic', {
+            this.backgroundMusic = this.sound.add("IGMusic", {
                 loop: true,
-                volume: 0.2
+                volume: 0.3
             });
             this.backgroundMusic.play();
         } else if (!bgMusic.isPlaying) {
-            // If found but not playing, start it.
             bgMusic.play();
-            this.backgroundMusic = bgMusic;
-        } else {
-            // Otherwise, use the existing background music.
-            this.backgroundMusic = bgMusic;
         }
         
         //Add bikes
@@ -101,10 +95,12 @@ class Play extends Phaser.Scene {
 
         // Handle power-up collection
         this.physics.add.overlap(this.bike, this.powerUpGroup, (bike, powerUp) => {
+            this.sound.play("collect")
             powerUp.applyEffect(this.bike);
         });
 
         this.physics.add.overlap(this.bike2, this.powerUpGroup, (bike, powerUp) => {
+            this.sound.play("collect")
             powerUp.applyEffect(this.bike2);
         });
     }
@@ -135,7 +131,12 @@ class Play extends Phaser.Scene {
     handleCollision(message, player) {
         if (this.collisionOccurred || this.countdownActive || player.invincible ) return; // Ignore if collision already happened
         this.collisionOccurred = true; // Mark collision as occurred
-        this.endGame(message);
+        player.bikeFSM.transition("explode")
+
+        this.sound.play("explosion")
+        this.time.delayedCall(1000, () => {
+            this.endGame(message);
+        });
     }
 
     addTrailSegment(trailGroup, x, y, color) {

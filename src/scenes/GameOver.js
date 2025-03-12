@@ -4,6 +4,9 @@ class GameOver extends Phaser.Scene {
     }
 
     create() {
+        //Stop all music
+        this.sound.stopAll()
+        
         // Check if background music is already playing.
         let bgMusic = this.sound.get('BGMusic');
         if (!bgMusic) {

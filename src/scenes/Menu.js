@@ -3,6 +3,9 @@ class Menu extends Phaser.Scene {
       super('menuScene');
     }
     create() {
+        //Stop all music
+        this.sound.stopByKey("IGMusic");
+
         //Add background image
         this.add.image(width/2, height/2, 'menu-background', )
 

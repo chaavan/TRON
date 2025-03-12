@@ -6,7 +6,6 @@ class Load extends Phaser.Scene{
     preload(){
         this.load.path = './assets/'
         this.load.image('background', 'img/Background.png')
-        this.load.image('trail', 'img/trail.png')
         this.load.image('menu-background', 'img/menu-background.png')
         this.load.image('speedBoost', 'img/speedBoost.png')
         this.load.image('opponentTrailDisable', 'img/speedBoost.png')
@@ -14,6 +13,10 @@ class Load extends Phaser.Scene{
         this.load.image('trailElongation', 'img/speedBoost.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
+        this.load.audio('IGMusic', 'audio/In-game-music.mp3')
+        this.load.audio('countdown', 'audio/countdown.mp3')
+        this.load.audio('explosion', 'audio/explosion1.mp3')
+        this.load.audio('collect', 'audio/collect.mp3')
         this.load.spritesheet('bike-left', 'img/Bike-left.png',{
             frameWidth: 64,
             frameHeight: 64
@@ -70,13 +73,13 @@ class Load extends Phaser.Scene{
             key: 'idle',
             frameRate: 8,
             repeat: -1,
-            frames: this.anims.generateFrameNumbers('bike-left', {start: 0, end: 1}),
+            frames: this.anims.generateFrameNumbers('bike-idle', {start: 0, end: 1}),
         })
         this.anims.create({
             key: 'explode',
-            frameRate: 8,
-            repeat: -1,
-            frames: this.anims.generateFrameNumbers('bike-idle', {start: 0, end: 3}),
+            frameRate: 5,
+            repeat: 0,
+            frames: this.anims.generateFrameNumbers('bike-explode', {start: 0, end: 3}),
         })
         this.scene.start('menuScene')
     }
