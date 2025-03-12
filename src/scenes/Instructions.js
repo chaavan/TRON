@@ -60,7 +60,10 @@ Press "Back to Menu" to return.
         backText.setInteractive({ useHandCursor: true });
         backText.on('pointerup', () => {
             this.sound.play('click');
-            this.scene.start('menuScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('menuScene');
+            });
         });
     }
 }

@@ -16,21 +16,19 @@ class Credits extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Credit Text
-        let creditText = `
-        Game Design & Programming:
-        Chaavan
+        let creditText = `Game Design & Programming:
+Chaavan
 
-        Assets & Art:
-        Chaavan, TBD
+Assets & Art:
+Chaavan, TBD
 
-        Music & Sound Effects:
-        Chaavan
+Music & Sound Effects:
+Chaavan
 
-        Made for CMPM 120
-        Instructor: Nathan Altice
+Made for CMPM 120
+Instructor: Nathan Altice
 
-        Powered by Phaser 3
-        `;
+Powered by Phaser 3`;
 
         this.add.text(this.scale.width / 2, 325, creditText, {
             fontSize: "18px",
@@ -47,10 +45,14 @@ class Credits extends Phaser.Scene {
             fontFamily: "Arial",
             backgroundColor: "#000",
             padding: { left: 10, right: 10, top: 5, bottom: 5 }
-        }).setOrigin(0.5).setInteractive();
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
         menuButton.on("pointerdown", () => {
-            this.scene.start("menuScene");
+            this.sound.play('click');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('menuScene');
+            });
         });
 
         menuButton.on("pointerover", () => {

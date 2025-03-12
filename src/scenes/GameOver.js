@@ -41,7 +41,10 @@ class GameOver extends Phaser.Scene {
         retryText.on('pointerup', () => {
             // Restart the play scene.
             this.sound.play('click');
-            this.scene.start('playScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('playScene');
+            });
         });
 
         // Create a "Menu" button.
@@ -54,9 +57,11 @@ class GameOver extends Phaser.Scene {
         // Make the Menu text interactive.
         menuText.setInteractive({ useHandCursor: true });
         menuText.on('pointerup', () => {
-            // Transition to the menu scene.
             this.sound.play('click');
-            this.scene.start('menuScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('menuScene');
+            });
         });
     }
 }

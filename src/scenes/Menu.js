@@ -25,30 +25,39 @@ class Menu extends Phaser.Scene {
         }
 
         // Display the game title
-        this.add.bitmapText(525, 250, 'calcio-italiano',  'Light Cycle', 64).setOrigin(0.5);
+        this.add.bitmapText(525, 150, 'calcio-italiano',  'Light Cycle', 64).setOrigin(0.5);
       
         // Create a Start Game button using text
-        const startText = this.add.text(525, 350, 'Start Game', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
-        startText.setInteractive();
+        const startText = this.add.text(525, 250, 'Start Game', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
+        startText.setInteractive({ useHandCursor: true });
         startText.on('pointerdown', () => {
             this.sound.play('click');
-            this.scene.start('playScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('playScene');
+            });
         });
 
         // Instructions 
-        const InstructionsText = this.add.text(525, 450, 'Instructions', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
-        InstructionsText.setInteractive();
+        const InstructionsText = this.add.text(525, 350, 'Instructions', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
+        InstructionsText.setInteractive({ useHandCursor: true });
         InstructionsText.on('pointerdown', () => {
             this.sound.play('click');
-            this.scene.start('instructionsScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start('instructionsScene');
+            });
         });
 
         // Credits
-        const creditsText = this.add.text(525, 550, 'Credits', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
-        creditsText.setInteractive();
+        const creditsText = this.add.text(525, 450, 'Credits', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
+        creditsText.setInteractive({ useHandCursor: true });
         creditsText.on('pointerdown', () => {
             this.sound.play('click');
-            this.scene.start('creditsScene');
+            this.cameras.main.fadeOut(1000); // Fade out
+            this.time.delayedCall(1000, () => {
+                this.scene.start("creditsScene");
+            });
         });
 
     }

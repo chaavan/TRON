@@ -166,6 +166,8 @@ class Play extends Phaser.Scene {
     }
     
     endGame(message) {
+        this.cameras.main.flash(500); // Quick white flash effect
+
         this.gameOver = true;
         this.add.text(this.game.config.width / 2, this.game.config.height / 2, message, {
             fontSize: '32px',
@@ -173,7 +175,10 @@ class Play extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.time.delayedCall(2000, () => {
-            this.scene.start("gameOverScene"); // Restart game after delay
+            this.cameras.main.fadeOut(1000); // Fade out before restarting
+            this.time.delayedCall(1000, () => {
+                this.scene.start("gameOverScene");
+            });
         });
     }
   

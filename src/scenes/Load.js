@@ -70,7 +70,7 @@ class Load extends Phaser.Scene{
             key: 'idle',
             frameRate: 8,
             repeat: -1,
-            frames: this.anims.generateFrameNumbers('bike-left', {start: 0, end: 3}),
+            frames: this.anims.generateFrameNumbers('bike-left', {start: 0, end: 1}),
         })
         this.anims.create({
             key: 'explode',
