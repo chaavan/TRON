@@ -5,8 +5,9 @@ class Load extends Phaser.Scene{
 
     preload(){
         this.load.path = './assets/'
-        this.load.image('background', 'img/Background.png');
+        this.load.image('background', 'img/Background.png')
         this.load.image('trail', 'img/trail.png')
+        this.load.image('menu-background', 'img/menu-background.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.spritesheet('bike-left', 'img/Bike-left.png',{
@@ -33,6 +34,7 @@ class Load extends Phaser.Scene{
             frameWidth: 64,
             frameHeight: 64
         })
+        this.load.bitmapFont('calcio-italiano', 'fonts/CalcioItaliano.png', 'fonts/CalcioItaliano.xml')
     }
 
     create(){

@@ -5,16 +5,16 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
       scene.physics.add.existing(this);
   
       // Adjust physics body size as needed
-      this.body.setSize(this.width - 10 , this.height / 2 - 10, true);
+      // this.body.setSize(this.width - 10 , this.height / 2 - 10, true);
       this.body.setCollideWorldBounds(true);
   
       // Store the intended starting direction (after countdown)
       this.initialDirection = initialDirection;
+      this.adjustBodySize(initialDirection);
       // Speed at which the bike moves (in pixels per second)
       this.bikeVelocity = 100;
 
       this.keys = controls;
-
       this.body.onWorldBounds = true;
       // Listen for worldbounds collisions.
       this.scene.physics.world.on('worldbounds', (body, up, down, left, right) => {
@@ -36,12 +36,23 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
     update(){
       this.bikeFSM.step()
     }
+
+    getDirection() {
+      return this.currentDirection;
+    }
+
+    adjustBodySize(direction) {
+      this.currentDirection = direction;
+      if (direction === "up" || direction === "down") {
+          this.body.setSize(this.width / 2 - 5, this.height - 15, true); // Narrow hitbox for vertical movement
+      } else if (direction === "left" || direction === "right") {
+          this.body.setSize(this.width - 15, this.height / 2 - 5, true); // Wider hitbox for horizontal movement
+      }
+  }
 }
   
 class IdleState extends State {
     enter(scene, bike) {
-      // Stop movement and play idle animation.
-      // bike.setAngle(270);
       bike.setVelocity(0, 0);
       bike.anims.play('idle', true);
   
@@ -69,6 +80,7 @@ class LeftState extends State {
       bike.setVelocity(-bike.bikeVelocity, 0);
     //   bike.body.setSize(this.width - 10 , this.height / 2 - 10);
       bike.anims.play('left', true);
+      bike.adjustBodySize("left");
     }
     execute(scene, bike) {
       // While moving left, only allow vertical turns.
@@ -90,6 +102,7 @@ class LeftState extends State {
       bike.direction = 'right';
       bike.setVelocity(bike.bikeVelocity, 0);
       bike.anims.play('right', true);
+      bike.adjustBodySize("right");
     }
     execute(scene, bike) {
       // While moving right, only allow vertical turns.
@@ -106,11 +119,12 @@ class LeftState extends State {
   
   class UpState extends State {
     enter(scene, bike) {
-      bike.body.setSize(this.width/2, this.height)
+      // bike.body.setSize(this.width/2, this.height)
       bike.setAngle(0);
       bike.direction = 'up';
       bike.setVelocity(0, -bike.bikeVelocity);
-    //   bike.anims.play('up', true);
+      // bike.anims.play('up', true);
+      bike.adjustBodySize("up");
     }
     execute(scene, bike) {
       // While moving up, only allow horizontal turns.
@@ -130,7 +144,8 @@ class LeftState extends State {
       bike.setAngle(180);
       bike.direction = 'down';
       bike.setVelocity(0, bike.bikeVelocity);
-    //   bike.anims.play('down', true);
+      // bike.anims.play('down', true);
+      bike.adjustBodySize("down");
     }
     execute(scene, bike) {
       // While moving down, only allow horizontal turns.

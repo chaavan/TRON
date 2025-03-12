@@ -3,6 +3,9 @@ class Menu extends Phaser.Scene {
       super('menuScene');
     }
     create() {
+        //Add background image
+        this.add.image(width/2, height/2, 'menu-background', )
+
         // Check if background music is already playing.
         let bgMusic = this.sound.get('BGMusic');
         if (!bgMusic) {
@@ -22,7 +25,7 @@ class Menu extends Phaser.Scene {
         }
 
         // Display the game title
-        this.add.text(525, 250, 'Light Cycle Game', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        this.add.bitmapText(525, 250, 'calcio-italiano',  'Light Cycle', 64).setOrigin(0.5);
       
         // Create a Start Game button using text
         const startText = this.add.text(525, 350, 'Start Game', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);

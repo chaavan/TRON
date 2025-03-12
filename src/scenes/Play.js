@@ -6,6 +6,17 @@ class Play extends Phaser.Scene {
     create(){
         //Stop all music
         // this.sound.stopAll()
+        
+        //Background
+        this.add.image(400, 215, 'background').setScale(1.6)
+
+        this.countdownActive = true
+
+        this.collisionOccurred = false
+        
+        new Countdown(this, this.scale.width / 2, this.scale.height / 2, () =>{
+            this.countdownActive = false
+        })
 
         // Check if background music is already playing.
         let bgMusic = this.sound.get('BGMusic');
@@ -24,20 +35,7 @@ class Play extends Phaser.Scene {
             // Otherwise, use the existing background music.
             this.backgroundMusic = bgMusic;
         }
-
-        //Background
-        this.add.image(400, 215, 'background').setScale(1.6)
-
-        new Countdown(this, this.scale.width / 2, this.scale.height / 2, () => {
-          // Callback when countdown finishes:
-          // Start your game logic here (e.g., enable bike movement, start timers, etc.)
-          console.log('Countdown complete! Starting game...');
-        });
-
-        //add keyboard input
-        // this.keys = this.input.keyboard.createCursorKeys()
         
-
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);
         this.bike2 = new Bike(this, 100, height / 2, 'bike-idle', 0, 'right', this.keysWASD = this.input.keyboard.addKeys({
@@ -46,92 +44,154 @@ class Play extends Phaser.Scene {
           down: Phaser.Input.Keyboard.KeyCodes.S,
           right: Phaser.Input.Keyboard.KeyCodes.D
         })).setAngle(90);
+        this.bike.setTint(0xff0000)
 
 
-        //Trail Management
-        this.trailSegments = [];
-        this.trailTimer = 0;
-        this.trailInterval = 80;     // Interval (in ms) between trail segments
-        this.trailLifetime = 3000;   // Each segment's lifetime in ms
+        // Trail Management
+        // **Physics Groups for Trails**
+        this.trailGroup1 = this.physics.add.group();
+        this.trailGroup2 = this.physics.add.group();
 
+        // Prevent instant self-collision
+        this.ignoreSelfCollisionFrames = 15;
+        this.framesSinceStart = 0;
+ 
+        // **Collision Detection (Disabled Initially)**
+        this.physics.add.collider(this.bike, this.trailGroup2, () => {
+            this.handleCollision("Player 2 Wins!");
+        }, null, this);
 
-        // debug key listener (assigned to D key)
+        this.physics.add.collider(this.bike2, this.trailGroup1, () => {
+            this.handleCollision("Player 1 Wins!");
+        }, null, this);
+
+        this.physics.add.collider(this.bike, this.trailGroup1, () => {
+            this.handleCollision("Player 2 Wins! (P1 crashed)");
+        }, null, this);
+
+        this.physics.add.collider(this.bike2, this.trailGroup2, () => {
+            this.handleCollision("Player 1 Wins! (P2 crashed)");
+        }, null, this);
+
+        // **Detect Direct Bike Collision**
+        this.physics.add.collider(this.bike, this.bike2, () => {
+            this.handleCollision("Both Players Crashed!");
+        }, null, this);
+        // Game over flag
+        this.gameOver = false;
+
+        // debug key listener (assigned to C key)
         this.input.keyboard.on('keydown-C', function() {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
-        }, this)
-
-        
+        }, this)       
     }
 
     update(time, delta){
-        // this.bikeFSM.step()
-        // this.bike2FSM.step()
+        if (this.gameOver) return;
 
         this.bike.update(time, delta);
         this.bike2.update(time, delta);
 
-        this.updateTrail(delta, this.bike)
-        this.updateTrail(delta, this.bike2)
+        let direction_B1 = this.bike.getDirection();
+        let direction_B2 = this.bike2.getDirection();
 
-        // this.handleCollisionForBike(this.bike)
-        // this.handleCollisionForBike(this.bike2)
+    //     console.log(direction_B1)
+    //     console.log(direction_B2)
 
-        // this.handleCollision()
+
+        // // Add new trail segments with physics bodies
+        // if(direction_B1 === 'left'){
+        //     this.addTrailSegment(this.trailGroup1, this.bike.x + 30, this.bike.y, 0xff0000); // Red Trail (Player 1)
+        // }
+        // if(direction_B2 === 'left'){
+        //     this.addTrailSegment(this.trailGroup2, this.bike2.x + 30, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
+        // }
+        // if(direction_B1 === 'right'){
+        //     this.addTrailSegment(this.trailGroup1, this.bike.x - 30, this.bike.y, 0xff0000); // Red Trail (Player 1)
+        // }
+        // if(direction_B2 === 'right'){
+        //     this.addTrailSegment(this.trailGroup2, this.bike2.x - 30, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
+        // }
+        // if(direction_B1 === 'up'){
+        //     this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y + 30, 0xff0000); // Red Trail (Player 1)
+        // }
+        // if(direction_B2 === 'up'){
+        //     this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y + 30, 0x00ff00); // Green Trail (Player 2)
+        // }
+        // if(direction_B1 === 'down'){
+        //     this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y - 30, 0xff0000); // Red Trail (Player 1)
+        // }
+        // if(direction_B2 === 'down'){
+        //     this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y - 30, 0x00ff00); // Green Trail (Player 2)
+        // }
+
+        this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y, 0xff0000); // Red Trail (Player 1)
+        this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
+
+        // Delay self-collision checks
+        this.framesSinceStart++;
     }
 
-    // handleCollisionForBike(bike) {
-    //   // Get the bike's bounding rectangle.
-    //   const bikeBounds = bike.getBounds();
-  
-    //   // Loop through each trail segment.
-    //   for (let i = 0; i < this.trailSegments.length; i++) {
-    //       let segment = this.trailSegments[i];
-    //       // Skip segments that are still in their no-collision grace period.
-    //       if (segment.noCollisionTime > 0) continue;
-    //       // Check for collision using the segment's bounds.
-    //       if (Phaser.Geom.Intersects.RectangleToRectangle(bikeBounds, segment.getBounds())) {
-    //           // If a collision is detected and the bike is not already in an explosion state.
-    //           if (!bike.anims.currentAnim || bike.anims.currentAnim.key !== 'bike-explode') {
-    //               // this.backgroundMusic.stop();
-    //               // this.sound.play('explosionAudio');
-    //               // Transition the bike's state machine to the 'explode' state.
-    //               bike.bikeFSM.transition('explode');
-    //           }
-    //           break;
-    //       }
-    //   }
-    // }
-  
+    // addTrailSegment(trailGroup, x, y, color) {
+    //     let trailSegment = this.add.rectangle(x, y, 4, 4, color);
+    //     this.physics.add.existing(trailSegment);
+    //     trailSegment.body.setImmovable(true);
+    //     trailGroup.add(trailSegment);
 
-    updateTrail(delta, bike) {
-      // Accumulate time to determine when to create a new trail segment.
-      this.trailTimer += delta;
-      
-      // If enough time has passed, create a new trail segment using the pixel asset.
-      if (this.trailTimer >= this.trailInterval) {
-          const segmentSize = 10; // Adjust the size to cover gaps.
-          // Create a new image from your single-pixel asset.
-          let segment = this.add.image(bike.x, bike.y, 'trail').setOrigin(0.5, 0.5);
-          // Scale the image to the desired segment size.
-          segment.setDisplaySize(segmentSize, segmentSize);
-          // Set lifetime and a short grace period for collision.
-          segment.lifetime = this.trailLifetime;
-          segment.noCollisionTime = 100; // 100ms grace period.
-          this.trailSegments.push(segment);
-          this.trailTimer = 0;
-      }
-      
-      // Update each trail segment's lifetime and the no-collision grace period.
-      for (let i = this.trailSegments.length - 1; i >= 0; i--) {
-          let segment = this.trailSegments[i];
-          segment.lifetime -= delta;
-          segment.noCollisionTime -= delta;
-          if (segment.lifetime <= 0) {
-              segment.destroy();
-              this.trailSegments.splice(i, 1);
-          }
-      }
+    //     // Remove older trail segments for performance
+    //     if (trailGroup.getChildren().length > 100) {
+    //         let oldestSegment = trailGroup.getFirstAlive();
+    //         if (oldestSegment) {
+    //             oldestSegment.destroy();
+    //         }
+    //     }
+    // }
+
+    handleCollision(message) {
+        if (this.collisionOccurred || this.countdownActive) return; // Ignore if collision already happened
+        this.collisionOccurred = true; // Mark collision as occurred
+        this.endGame(message);
+    }
+
+    addTrailSegment(trailGroup, x, y, color) {
+        let trailSegment = this.add.rectangle(x, y, 4, 4, color);
+        this.physics.add.existing(trailSegment);
+        trailSegment.body.setImmovable(true);
+        
+        // Disable collision initially
+        trailSegment.body.checkCollision.none = true;
+    
+        // Enable collision after 200ms
+        this.time.delayedCall(500, () => {
+            if (!this.countdownActive && trailSegment.body) {
+                trailSegment.body.checkCollision.none = false;
+            }
+        });
+    
+        // Add to trail group
+        trailGroup.add(trailSegment);
+    
+        // Remove older trail segments for performance
+        if (trailGroup.getChildren().length > 100) {
+            let oldestSegment = trailGroup.getFirstAlive();
+            if (oldestSegment) {
+                oldestSegment.destroy();
+            }
+        }
+    }
+    
+
+    endGame(message) {
+        this.gameOver = true;
+        this.add.text(this.game.config.width / 2, this.game.config.height / 2, message, {
+            fontSize: '32px',
+            fill: '#fff',
+        }).setOrigin(0.5);
+
+        this.time.delayedCall(2000, () => {
+            this.scene.start("gameOverScene"); // Restart game after delay
+        });
     }
   
 }
