@@ -42,5 +42,14 @@ class Menu extends Phaser.Scene {
             this.sound.play('click');
             this.scene.start('instructionsScene');
         });
+
+        // Credits
+        const creditsText = this.add.text(525, 550, 'Credits', { fontSize: '24px', fill: '#0f0' }).setOrigin(0.5);
+        creditsText.setInteractive();
+        creditsText.on('pointerdown', () => {
+            this.sound.play('click');
+            this.scene.start('creditsScene');
+        });
+
     }
   }
