@@ -17,9 +17,9 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
       this.keys = controls;
       this.body.onWorldBounds = true;
       // Listen for worldbounds collisions.
-      this.scene.physics.world.on('worldbounds', (body, up, down, left, right) => {
-          scene.scene.start('gameOverScene')
-      }, this)
+      // this.scene.physics.world.on('worldbounds', (body, up, down, left, right) => {
+      //     scene.scene.start('gameOverScene')
+      // }, this)
 
       // Initialize the bike's state machine.
       // Start in the idle state for the countdown, then transition to the chosen initial direction.

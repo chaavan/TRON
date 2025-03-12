@@ -8,6 +8,10 @@ class Load extends Phaser.Scene{
         this.load.image('background', 'img/Background.png')
         this.load.image('trail', 'img/trail.png')
         this.load.image('menu-background', 'img/menu-background.png')
+        this.load.image('speedBoost', 'img/speedBoost.png')
+        this.load.image('opponentTrailDisable', 'img/speedBoost.png')
+        this.load.image('trailInvincibility', 'img/speedBoost.png')
+        this.load.image('trailElongation', 'img/speedBoost.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.spritesheet('bike-left', 'img/Bike-left.png',{

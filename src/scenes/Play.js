@@ -58,24 +58,24 @@ class Play extends Phaser.Scene {
  
         // **Collision Detection (Disabled Initially)**
         this.physics.add.collider(this.bike, this.trailGroup2, () => {
-            this.handleCollision("Player 2 Wins!");
+            this.handleCollision("Player 2 Wins!", this.bike);
         }, null, this);
 
         this.physics.add.collider(this.bike2, this.trailGroup1, () => {
-            this.handleCollision("Player 1 Wins!");
+            this.handleCollision("Player 1 Wins!", this.bike2);
         }, null, this);
 
         this.physics.add.collider(this.bike, this.trailGroup1, () => {
-            this.handleCollision("Player 2 Wins! (P1 crashed)");
+            this.handleCollision("Player 2 Wins! (P1 crashed)", this.bike);
         }, null, this);
 
         this.physics.add.collider(this.bike2, this.trailGroup2, () => {
-            this.handleCollision("Player 1 Wins! (P2 crashed)");
+            this.handleCollision("Player 1 Wins! (P2 crashed)", this.bike2);
         }, null, this);
 
         // **Detect Direct Bike Collision**
         this.physics.add.collider(this.bike, this.bike2, () => {
-            this.handleCollision("Both Players Crashed!");
+            this.handleCollision("Both Players Crashed!", this.bike);
         }, null, this);
         // Game over flag
         this.gameOver = false;
@@ -84,7 +84,29 @@ class Play extends Phaser.Scene {
         this.input.keyboard.on('keydown-C', function() {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
-        }, this)       
+        }, this) 
+        
+        this.powerUpTypes = ["speedBoost", "trailInvincibility", "trailElongation", "opponentTrailDisable"];
+
+        // Power-up group
+        this.powerUpGroup = this.physics.add.group();
+
+        // Spawn power-ups every 10 seconds
+        this.time.addEvent({
+            delay: 10000,
+            callback: this.spawnPowerUp,
+            callbackScope: this,
+            loop: true
+        });
+
+        // Handle power-up collection
+        this.physics.add.overlap(this.bike, this.powerUpGroup, (bike, powerUp) => {
+            powerUp.applyEffect(this.bike);
+        });
+
+        this.physics.add.overlap(this.bike2, this.powerUpGroup, (bike, powerUp) => {
+            powerUp.applyEffect(this.bike2);
+        });
     }
 
     update(time, delta){
@@ -93,39 +115,6 @@ class Play extends Phaser.Scene {
         this.bike.update(time, delta);
         this.bike2.update(time, delta);
 
-        let direction_B1 = this.bike.getDirection();
-        let direction_B2 = this.bike2.getDirection();
-
-    //     console.log(direction_B1)
-    //     console.log(direction_B2)
-
-
-        // // Add new trail segments with physics bodies
-        // if(direction_B1 === 'left'){
-        //     this.addTrailSegment(this.trailGroup1, this.bike.x + 30, this.bike.y, 0xff0000); // Red Trail (Player 1)
-        // }
-        // if(direction_B2 === 'left'){
-        //     this.addTrailSegment(this.trailGroup2, this.bike2.x + 30, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
-        // }
-        // if(direction_B1 === 'right'){
-        //     this.addTrailSegment(this.trailGroup1, this.bike.x - 30, this.bike.y, 0xff0000); // Red Trail (Player 1)
-        // }
-        // if(direction_B2 === 'right'){
-        //     this.addTrailSegment(this.trailGroup2, this.bike2.x - 30, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
-        // }
-        // if(direction_B1 === 'up'){
-        //     this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y + 30, 0xff0000); // Red Trail (Player 1)
-        // }
-        // if(direction_B2 === 'up'){
-        //     this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y + 30, 0x00ff00); // Green Trail (Player 2)
-        // }
-        // if(direction_B1 === 'down'){
-        //     this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y - 30, 0xff0000); // Red Trail (Player 1)
-        // }
-        // if(direction_B2 === 'down'){
-        //     this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y - 30, 0x00ff00); // Green Trail (Player 2)
-        // }
-
         this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y, 0xff0000); // Red Trail (Player 1)
         this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
 
@@ -133,23 +122,18 @@ class Play extends Phaser.Scene {
         this.framesSinceStart++;
     }
 
-    // addTrailSegment(trailGroup, x, y, color) {
-    //     let trailSegment = this.add.rectangle(x, y, 4, 4, color);
-    //     this.physics.add.existing(trailSegment);
-    //     trailSegment.body.setImmovable(true);
-    //     trailGroup.add(trailSegment);
+    spawnPowerUp() {
+        let x = Phaser.Math.Between(50, this.game.config.width - 50);
+        let y = Phaser.Math.Between(50, this.game.config.height - 50);
+        let type = Phaser.Utils.Array.GetRandom(this.powerUpTypes);
+    
+        let powerUp = new PowerUp(this, x, y, type);
+        console.log(type)
+        this.powerUpGroup.add(powerUp);
+    }
 
-    //     // Remove older trail segments for performance
-    //     if (trailGroup.getChildren().length > 100) {
-    //         let oldestSegment = trailGroup.getFirstAlive();
-    //         if (oldestSegment) {
-    //             oldestSegment.destroy();
-    //         }
-    //     }
-    // }
-
-    handleCollision(message) {
-        if (this.collisionOccurred || this.countdownActive) return; // Ignore if collision already happened
+    handleCollision(message, player) {
+        if (this.collisionOccurred || this.countdownActive || player.invincible ) return; // Ignore if collision already happened
         this.collisionOccurred = true; // Mark collision as occurred
         this.endGame(message);
     }
@@ -181,7 +165,6 @@ class Play extends Phaser.Scene {
         }
     }
     
-
     endGame(message) {
         this.gameOver = true;
         this.add.text(this.game.config.width / 2, this.game.config.height / 2, message, {
