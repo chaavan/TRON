@@ -5,6 +5,9 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     this.body.setCollideWorldBounds(true);
 
+    // Determine if this is an AI bike
+    this.isAI = (controls === null);
+
     // Store the intended starting direction (after countdown)
     this.initialDirection = initialDirection;
     this.adjustBodySize(initialDirection);
@@ -12,7 +15,7 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
     // Speed at which the bike moves (in pixels per second)
     this.bikeVelocity = 100;
 
-    this.keys = controls;
+    this.keys = controls || {};
 
     // Initialize the bike's state machine.
     // Start in the idle state for the countdown, then transition to the chosen initial direction.
@@ -76,13 +79,15 @@ class LeftState extends State {
   }
   execute(scene, bike) {
     // While moving left, only allow vertical turns.
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
-      this.stateMachine.transition('up');
-      return;
-    }
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
-      this.stateMachine.transition('down');
-      return;
+    if(!bike.isAI){
+      if (bike.keys.up && Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
+        this.stateMachine.transition('up');
+        return;
+      }
+      if (bike.keys.down && Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
+        this.stateMachine.transition('down');
+        return;
+      }
     }
     // Continue moving left.
   }
@@ -98,13 +103,15 @@ class RightState extends State {
   }
   execute(scene, bike) {
     // While moving right, only allow vertical turns.
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
-      this.stateMachine.transition('up');
-      return;
-    }
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
-      this.stateMachine.transition('down');
-      return;
+    if(!bike.isAI){
+      if (bike.keys.up && Phaser.Input.Keyboard.JustDown(bike.keys.up)) {
+        this.stateMachine.transition('up');
+        return;
+      }
+      if (bike.keys.down && Phaser.Input.Keyboard.JustDown(bike.keys.down)) {
+        this.stateMachine.transition('down');
+        return;
+      }
     }
   }
 }
@@ -119,13 +126,15 @@ class UpState extends State {
   }
   execute(scene, bike) {
     // While moving up, only allow horizontal turns.
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
-      this.stateMachine.transition('left');
-      return;
-    }
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
-      this.stateMachine.transition('right');
-      return;
+    if(!bike.isAI){
+      if (bike.keys.left && Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
+        this.stateMachine.transition('left');
+        return;
+      }
+      if (bike.keys.right && Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
+        this.stateMachine.transition('right');
+        return;
+      }
     }
   }
 }
@@ -140,13 +149,15 @@ class DownState extends State {
   }
   execute(scene, bike) {
     // While moving down, only allow horizontal turns.
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
-      this.stateMachine.transition('left');
-      return;
-    }
-    if (Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
-      this.stateMachine.transition('right');
-      return;
+    if(!bike.isAI){
+      if (bike.keys.left && Phaser.Input.Keyboard.JustDown(bike.keys.left)) {
+        this.stateMachine.transition('left');
+        return;
+      }
+      if (bike.keys.right && Phaser.Input.Keyboard.JustDown(bike.keys.right)) {
+        this.stateMachine.transition('right');
+        return;
+      }
     }
   }
 }
@@ -161,5 +172,6 @@ class ExplodeState extends State {
     scene.cameras.main.shake(500, 0.02); // Screen shake effect
 
     bike.body.checkCollision.none = true;
+    bike.bikeFSM.active = false;
   }
 }

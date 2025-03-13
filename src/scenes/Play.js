@@ -29,16 +29,31 @@ class Play extends Phaser.Scene {
         } else if (!bgMusic.isPlaying) {
             bgMusic.play();
         }
+
+        let gameMode = this.registry.get("gameMode");
         
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);
-        this.bike2 = new Bike(this, 100, height / 2, 'bike-idle', 0, 'right', this.keysWASD = this.input.keyboard.addKeys({
-          up: Phaser.Input.Keyboard.KeyCodes.W,
-          left: Phaser.Input.Keyboard.KeyCodes.A,
-          down: Phaser.Input.Keyboard.KeyCodes.S,
-          right: Phaser.Input.Keyboard.KeyCodes.D
-        })).setAngle(90);
-        this.bike.setTint(0xff0000)
+        // this.bike2 = new Bike(this, 100, height / 2, 'bike-idle', 0, 'right', this.input.keyboard.addKeys({
+        //   up: Phaser.Input.Keyboard.KeyCodes.W,
+        //   left: Phaser.Input.Keyboard.KeyCodes.A,
+        //   down: Phaser.Input.Keyboard.KeyCodes.S,
+        //   right: Phaser.Input.Keyboard.KeyCodes.D
+        // })).setAngle(90);
+
+        if (gameMode === "AI") {
+            // AI-controlled bike
+            this.bike2 = new BikeAI(this, 100, this.scale.height / 2, 'bike-idle', 0, 'right').setAngle(90);
+        } else {
+            // Player-controlled bike
+            this.bike2 = new Bike(this, 100, this.scale.height / 2, 'bike-idle', 0, 'right', this.input.keyboard.addKeys({
+                up: Phaser.Input.Keyboard.KeyCodes.W,
+                left: Phaser.Input.Keyboard.KeyCodes.A,
+                down: Phaser.Input.Keyboard.KeyCodes.S,
+                right: Phaser.Input.Keyboard.KeyCodes.D
+            })).setAngle(90);
+        }
+        this.bike2.setTint(0xff0000)
 
 
         // Trail Management
