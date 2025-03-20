@@ -8,8 +8,11 @@ class Play extends Phaser.Scene {
         this.sound.stopByKey("BGMusic");
 
         //Background
-        this.add.image(400, 215, 'background').setScale(1.6)
+        let backgroundIMG = this.add.image(width/2, height/2, 'background')
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.1).setOrigin(0.5);
 
+        backgroundIMG.setOrigin(0.5);
+        backgroundIMG.setScale(1.2)
         this.countdownActive = true
 
         this.collisionOccurred = false
@@ -32,7 +35,7 @@ class Play extends Phaser.Scene {
         }
 
         let gameMode = this.registry.get("gameMode");
-        this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'calcio-italiano', 'Time: 0:00', 24).setOrigin(0, 0);
+        this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'Tron', 'Time: 0:00', 32).setOrigin(0, 0);
         
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);
@@ -195,10 +198,8 @@ class Play extends Phaser.Scene {
         this.cameras.main.flash(500); // Quick white flash effect
 
         this.gameOver = true;
-        this.add.text(this.game.config.width / 2, this.game.config.height / 2, message, {
-            fontSize: '32px',
-            fill: '#fff',
-        }).setOrigin(0.5);
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.8).setOrigin(0.5);
+        this.add.bitmapText(this.game.config.width / 2, this.game.config.height / 2, 'Tron',  message, 32).setOrigin(0.5);
 
         let duration = Date.now() - this.startTime;
 

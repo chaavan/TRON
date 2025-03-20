@@ -41,42 +41,52 @@ class GameOver extends Phaser.Scene {
         // Display "Game Over" title text.
         this.add.bitmapText(525, 150, 'Tron',  'Game Over', 64).setOrigin(0.5);
 
-        //Display time
+        // Display time
         this.add.bitmapText(525, 250, 'Tron', 'Time Played : ' + formattedTime, 32).setOrigin(0.5);
 
-        // Create a "Retry" button.
-        const retryText = this.add.text(this.scale.width / 2, 350, 'Retry', {
-            fontFamily: 'JumperGradient',
-            fontSize: '32px',
-            fill: '#0f0' 
-        }).setOrigin(0.5);
+        // Retry Button
+        this.createRetryButton();
 
-        // Make the Retry text interactive.
-        retryText.setInteractive({ useHandCursor: true });
-        retryText.on('pointerup', () => {
-            // Restart the play scene.
+        // Menu Button
+        this.createMenuButton();
+    }
+
+    createMenuButton(){
+        this.menuButton = this.add.image(525, 450, 'MenuButton').setInteractive({ useHandCursor: true });
+        this.menuButton.setOrigin(0.5);
+
+        this.menuButton.on('pointerdown', () => {
             this.sound.play('click');
-            this.cameras.main.fadeOut(1000); // Fade out
+            this.cameras.main.fadeOut(1000);
             this.time.delayedCall(1000, () => {
-                this.scene.start('playScene');
+                this.scene.start("menuScene");
             });
         });
 
-        // Create a "Menu" button.
-        const menuText = this.add.text(this.scale.width / 2, 450, 'Menu', {
-            fontFamily: 'JumperGradient',
-            fontSize: '32px',
-            fill: '#0f0' 
-        }).setOrigin(0.5);
+        this.menuButton.on('pointerover', () => {
+            this.menuButton.setScale(1.1);
+        });
+        this.menuButton.on('pointerout', () => {
+            this.menuButton.setScale(1);
+        });
+    }
+    createRetryButton(){
+        this.retryButton = this.add.image(525, 350, 'RetryButton').setInteractive({ useHandCursor: true });
+        this.retryButton.setOrigin(0.5);
 
-        // Make the Menu text interactive.
-        menuText.setInteractive({ useHandCursor: true });
-        menuText.on('pointerup', () => {
+        this.retryButton.on('pointerdown', () => {
             this.sound.play('click');
-            this.cameras.main.fadeOut(1000); // Fade out
+            this.cameras.main.fadeOut(1000);
             this.time.delayedCall(1000, () => {
-                this.scene.start('menuScene');
+                this.scene.start("playScene");
             });
+        });
+
+        this.retryButton.on('pointerover', () => {
+            this.retryButton.setScale(1.1);
+        });
+        this.retryButton.on('pointerout', () => {
+            this.retryButton.setScale(1);
         });
     }
 }

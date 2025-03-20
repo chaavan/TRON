@@ -26,11 +26,7 @@ class Instructions extends Phaser.Scene {
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Title text
-        this.add.text(this.scale.width / 2, 50, 'Instructions', {
-            fontFamily: 'JumperGradient',
-            fontSize: '48px',
-            fill: '#fff'
-        }).setOrigin(0.5);
+        this.add.bitmapText(525, 100, 'Tron',  'Instructions', 64).setOrigin(0.5);
 
         // Instructions text
         const instructionsText = `
@@ -54,19 +50,26 @@ Press "Back to Menu" to return.
         }).setOrigin(0.5);
 
         // Back to Menu button
-        const backText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'Back to Menu', {
-            fontFamily: 'JumperGradient',
-            fontSize: '32px',
-            fill: '#0f0' 
-        }).setOrigin(0.5);
+        this.createMenuButton();
+    }
 
-        backText.setInteractive({ useHandCursor: true });
-        backText.on('pointerup', () => {
+    createMenuButton(){
+        this.menuButton = this.add.image(525, 475, 'MenuButton').setInteractive({ useHandCursor: true });
+        this.menuButton.setOrigin(0.5);
+
+        this.menuButton.on('pointerdown', () => {
             this.sound.play('click');
-            this.cameras.main.fadeOut(1000); // Fade out
+            this.cameras.main.fadeOut(1000);
             this.time.delayedCall(1000, () => {
-                this.scene.start('menuScene');
+                this.scene.start("menuScene");
             });
+        });
+
+        this.menuButton.on('pointerover', () => {
+            this.menuButton.setScale(1.1);
+        });
+        this.menuButton.on('pointerout', () => {
+            this.menuButton.setScale(1);
         });
     }
 }

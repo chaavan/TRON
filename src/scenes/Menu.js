@@ -34,87 +34,119 @@ class Menu extends Phaser.Scene {
         // Create initial Play button
         this.createPlayButton();
 
-        // Instructions button
-        const instructionsText = this.add.text(525, 350, 'Instructions', {
-        fontSize: '24px',
-        fill: '#0f0',
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        
-        instructionsText.on('pointerdown', () => {
-        this.sound.play('click');
-        this.cameras.main.fadeOut(1000);
-        this.time.delayedCall(1000, () => {
-            this.scene.start('instructionsScene');
-        });
-        });
+        // Create the Instructions button using an image
+        this.createInstructionsButton();
 
-        // Credits button
-        const creditsText = this.add.text(525, 450, 'Credits', {
-        fontSize: '24px',
-        fill: '#0f0',
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
-        
-        creditsText.on('pointerdown', () => {
-        this.sound.play('click');
-        this.cameras.main.fadeOut(1000);
-        this.time.delayedCall(1000, () => {
-            this.scene.start("creditsScene");
-        });
-        });
+        // Create the Credits button using an image
+        this.createCreditsButton();
     }
 
     createPlayButton() {
-        let playButton = this.add.text(525, 250, "Play", {
-        fontSize: "28px",
-        fill: "#0f0",
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+         // Create the play button image
+        // Assumes that you have loaded an image with key "playButton" in Load.js
+        let playButton = this.add.image(525, 250, 'playButton').setInteractive({ useHandCursor: true });
+        playButton.setOrigin(0.5);
 
         playButton.on('pointerdown', () => {
         this.sound.play('click');
         playButton.destroy();
+        this.disableOtherButtons(); // disable instructions and credits buttons
         this.showGameModeTab();
         });
+        
         playButton.on('pointerover', () => {
-        playButton.setStyle({ fill: "#fff" });
+        playButton.setScale(1.1);
         });
         playButton.on('pointerout', () => {
-        playButton.setStyle({ fill: "#0f0" });
+        playButton.setScale(1);
+        });
+    }
+    
+    createInstructionsButton() {
+        this.instructionsButton = this.add.image(525, 350, 'instructionsButton').setInteractive({ useHandCursor: true });
+        this.instructionsButton.setOrigin(0.5);
+    
+        this.instructionsButton.on('pointerdown', () => {
+          this.sound.play('click');
+          this.cameras.main.fadeOut(1000);
+          this.time.delayedCall(1000, () => {
+            this.scene.start('instructionsScene');
+          });
+        });
+    
+        this.instructionsButton.on('pointerover', () => {
+            this.instructionsButton.setScale(1.1);
+        });
+        this.instructionsButton.on('pointerout', () => {
+            this.instructionsButton.setScale(1);
+        });
+    }
+    
+    createCreditsButton() {
+        this.creditsButton = this.add.image(525, 450, 'creditsButton').setInteractive({ useHandCursor: true });
+        this.creditsButton.setOrigin(0.5);
+    
+        this.creditsButton.on('pointerdown', () => {
+          this.sound.play('click');
+          this.cameras.main.fadeOut(1000);
+          this.time.delayedCall(1000, () => {
+            this.scene.start("creditsScene");
+          });
+        });
+    
+        this.creditsButton.on('pointerover', () => {
+            this.creditsButton.setScale(1.1);
+        });
+        this.creditsButton.on('pointerout', () => {
+            this.creditsButton.setScale(1);
         });
     }
 
+    disableOtherButtons() {
+        // Disable interactivity on instructions and credits buttons
+        if(this.instructionsButton) {
+          this.instructionsButton.disableInteractive();
+          this.instructionsButton.setAlpha(0.5);
+        }
+        if(this.creditsButton) {
+          this.creditsButton.disableInteractive();
+          this.creditsButton.setAlpha(0.5);
+        }
+    }
+    
+    enableOtherButtons() {
+        // Re-enable interactivity on instructions and credits buttons
+        if(this.instructionsButton) {
+            this.instructionsButton.setInteractive({ useHandCursor: true });
+            this.instructionsButton.setAlpha(1);
+        }
+        if(this.creditsButton) {
+            this.creditsButton.setInteractive({ useHandCursor: true });
+            this.creditsButton.setAlpha(1);
+        }
+    }
+    
     showGameModeTab() {
         // Define dimensions and position for the tab.
-        const tabWidth = 800;
-        const tabHeight = 500;
+        const tabWidth = 700;
+        const tabHeight = 400;
         const tabX = this.scale.width / 2;
         const tabY = 300;
         
         // Create a semi-transparent background rectangle for the tab.
-        let tabBackground = this.add.rectangle(tabX, tabY, tabWidth, tabHeight, 0x000000, 0.9).setOrigin(0.5);
+        let tabBackground = this.add.rectangle(tabX, tabY, tabWidth, tabHeight, 0x000000, 0.6).setOrigin(0.5);
         
-        // Create "Play vs AI" option on the left side of the tab.
-        let playVsAI = this.add.text(tabX - tabWidth / 4, tabY, "Play vs AI", {
-        fontSize: "24px",
-        fill: "#0f0",
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        // Create "Play vs AI" option as an image on the left side of the tab.
+        let playVsAI = this.add.image(tabX - tabWidth / 4, tabY - 20, 'AIButton').setInteractive({ useHandCursor: true });
+        playVsAI.setOrigin(0.5);
         
-        // Create "Play vs Player" option on the right side of the tab.
-        let playVsPlayer = this.add.text(tabX + tabWidth / 4, tabY, "Play vs Player", {
-        fontSize: "24px",
-        fill: "#0f0",
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        // Create "Play vs Player" option as an image on the right side of the tab.
+        let playVsPlayer = this.add.image(tabX + tabWidth / 4, tabY - 20, 'playerButton').setInteractive({ useHandCursor: true });
+        playVsPlayer.setOrigin(0.5);
         
-        // Create a "Back" button below the tab.
-        let backButton = this.add.text(tabX, tabY + tabHeight / 2 - 40, "Menu", {
-        fontSize: "20px",
-        fill: "#ff0",
-        fontFamily: "Arial"
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        // Create a "Back" button as an image below the tab.
+        let backButton = this.add.image(tabX, tabY + tabHeight / 2 - 50, 'MenuButton').setInteractive({ useHandCursor: true });
+        backButton.setOrigin(0.5);
         
         // Option click handlers:
         playVsAI.on("pointerdown", () => {
@@ -137,35 +169,35 @@ class Menu extends Phaser.Scene {
         
         backButton.on("pointerdown", () => {
         this.sound.play('click');
-        // Destroy the tab elements.
         tabBackground.destroy();
         playVsAI.destroy();
         playVsPlayer.destroy();
         backButton.destroy();
-        // Recreate the original Play button.
+        // Recreate the original Play button image.
         this.createPlayButton();
+        this.enableOtherButtons();
         });
         
-        // Hover effects for options.
+        // Hover effects for the game mode option images and back button.
         playVsAI.on("pointerover", () => {
-        playVsAI.setStyle({ fill: "#fff" });
+        playVsAI.setScale(1.1);
         });
         playVsAI.on("pointerout", () => {
-        playVsAI.setStyle({ fill: "#0f0" });
+        playVsAI.setScale(1);
         });
         
         playVsPlayer.on("pointerover", () => {
-        playVsPlayer.setStyle({ fill: "#fff" });
+        playVsPlayer.setScale(1.1);
         });
         playVsPlayer.on("pointerout", () => {
-        playVsPlayer.setStyle({ fill: "#0f0" });
+        playVsPlayer.setScale(1);
         });
         
         backButton.on("pointerover", () => {
-        backButton.setStyle({ fill: "#fff" });
+        backButton.setScale(1.1);
         });
         backButton.on("pointerout", () => {
-        backButton.setStyle({ fill: "#ff0" });
+        backButton.setScale(1);
         });
     }
 }
