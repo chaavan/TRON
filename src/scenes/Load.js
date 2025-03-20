@@ -8,9 +8,9 @@ class Load extends Phaser.Scene{
         this.load.image('background', 'img/Background.png')
         this.load.image('menu-background', 'img/menu-background.png')
         this.load.image('speedBoost', 'img/speedBoost.png')
-        this.load.image('opponentTrailDisable', 'img/speedBoost.png')
-        this.load.image('trailInvincibility', 'img/speedBoost.png')
-        this.load.image('trailElongation', 'img/speedBoost.png')
+        this.load.image('opponentTrailDisable', 'img/trailDisable.png')
+        this.load.image('trailInvincibility', 'img/invincibility.png')
+        this.load.image('trailElongation', 'img/trailElong.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.audio('IGMusic', 'audio/In-game-music.mp3')
@@ -42,6 +42,7 @@ class Load extends Phaser.Scene{
             frameHeight: 64
         })
         this.load.bitmapFont('calcio-italiano', 'fonts/CalcioItaliano.png', 'fonts/CalcioItaliano.xml')
+        this.load.bitmapFont('Tron', 'fonts/TRON.png', 'fonts/TRON.xml')
     }
 
     create(){

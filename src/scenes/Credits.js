@@ -5,7 +5,8 @@ class Credits extends Phaser.Scene {
 
     create() {
         // Background
-        this.add.image(400, 215, 'background').setScale(1.6);
+        this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Title
         this.add.text(this.scale.width / 2, 100, "Game Credits", {
@@ -20,7 +21,7 @@ class Credits extends Phaser.Scene {
 Chaavan
 
 Assets & Art:
-Chaavan, TBD
+Chaavan
 
 Music & Sound Effects:
 Chaavan

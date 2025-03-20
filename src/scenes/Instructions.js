@@ -21,6 +21,9 @@ class Instructions extends Phaser.Scene {
             // Otherwise, use the existing background music.
             this.backgroundMusic = bgMusic;
         }
+        
+        this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Title text
         this.add.text(this.scale.width / 2, 50, 'Instructions', {
@@ -46,7 +49,7 @@ Press "Back to Menu" to return.
             fontFamily: 'Arial',
             fontSize: '20px',
             fill: '#fff',
-            align: 'center',
+            // align: 'center',
             wordWrap: { width: this.scale.width - 100 }
         }).setOrigin(0.5);
 
