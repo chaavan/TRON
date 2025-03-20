@@ -37,7 +37,9 @@ class Play extends Phaser.Scene {
         }
 
         let gameMode = this.registry.get("gameMode");
+        this.add.rectangle(this.game.config.width - 120, 35, 250, 50, 0x000000, 0.7)
         this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'content', 'Time: 0:00', 32).setOrigin(0, 0);
+
         
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);

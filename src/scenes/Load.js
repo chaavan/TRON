@@ -91,6 +91,6 @@ class Load extends Phaser.Scene{
             repeat: 0,
             frames: this.anims.generateFrameNumbers('bike-explode', {start: 0, end: 3}),
         })
-        this.scene.start('instructionsScene')
+        this.scene.start('menuScene')
     }
 }
