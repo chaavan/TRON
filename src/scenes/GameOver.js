@@ -8,9 +8,10 @@ class GameOver extends Phaser.Scene {
     }
 
     create() {
-        //Stop all music
+        // Pause prior audio
         this.sound.stopAll()
 
+        // Background Image
         this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
@@ -38,7 +39,7 @@ class GameOver extends Phaser.Scene {
         let seconds = totalSeconds % 60;
         let formattedTime = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
 
-        // Display "Game Over" title text.
+        // Display "Game Over"
         this.add.bitmapText(525, 150, 'Tron',  'Game Over', 64).setOrigin(0.5);
 
         // Display time

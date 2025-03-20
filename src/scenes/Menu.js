@@ -3,10 +3,10 @@ class Menu extends Phaser.Scene {
       super('menuScene');
     }
     create() {
-        //Stop all music
+        // Pause the music
         this.sound.stopByKey("IGMusic");
 
-        //Add background image
+        // Add background image
         this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
@@ -43,7 +43,6 @@ class Menu extends Phaser.Scene {
 
     createPlayButton() {
          // Create the play button image
-        // Assumes that you have loaded an image with key "playButton" in Load.js
         let playButton = this.add.image(525, 250, 'playButton').setInteractive({ useHandCursor: true });
         playButton.setOrigin(0.5);
 
@@ -134,17 +133,21 @@ class Menu extends Phaser.Scene {
         const tabY = 300;
         
         // Create a semi-transparent background rectangle for the tab.
+        let temp_layer = this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         let tabBackground = this.add.rectangle(tabX, tabY, tabWidth, tabHeight, 0x000000, 0.6).setOrigin(0.5);
-        
-        // Create "Play vs AI" option as an image on the left side of the tab.
+
+        // Title
+        let title = this.add.bitmapText(tabX - 65, tabY - 150, 'Tron', 'Choose:', 32, 1)
+
+        // "Play vs AI" option
         let playVsAI = this.add.image(tabX - tabWidth / 4, tabY - 20, 'AIButton').setInteractive({ useHandCursor: true });
         playVsAI.setOrigin(0.5);
         
-        // Create "Play vs Player" option as an image on the right side of the tab.
+        // "Play vs Player"
         let playVsPlayer = this.add.image(tabX + tabWidth / 4, tabY - 20, 'playerButton').setInteractive({ useHandCursor: true });
         playVsPlayer.setOrigin(0.5);
         
-        // Create a "Back" button as an image below the tab.
+        // "Back" button
         let backButton = this.add.image(tabX, tabY + tabHeight / 2 - 50, 'MenuButton').setInteractive({ useHandCursor: true });
         backButton.setOrigin(0.5);
         
@@ -169,6 +172,8 @@ class Menu extends Phaser.Scene {
         
         backButton.on("pointerdown", () => {
         this.sound.play('click');
+        title.destroy();
+        temp_layer.destroy();
         tabBackground.destroy();
         playVsAI.destroy();
         playVsPlayer.destroy();

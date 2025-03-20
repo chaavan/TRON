@@ -21,16 +21,21 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
     applyEffect(player) {
         let opponent = player === this.scene.bike ? this.scene.bike2 : this.scene.bike;
 
+        // Increase velocity
         if (this.type === "speedBoost") {
             player.bikeVelocity *= 1.5;
             player.scene.time.delayedCall(8000, () => {
                 player.bikeVelocity /= 1.5;
             });
+
+        // Immune to collsions for 5 secondss
         } else if (this.type === "trailInvincibility") {
             player.invincible = true;
             player.scene.time.delayedCall(5000, () => {
                 player.invincible = false;
             });
+
+        // Increase trail segment length
         } else if (this.type === "trailElongation") {
             let trailGroup = player === player.scene.bike ? player.scene.trailGroup1 : player.scene.trailGroup2;
             player.invincible = true;
@@ -47,6 +52,8 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
             player.scene.time.delayedCall(1000, () => {
                 player.invincible = false;
             });
+
+        // Reset opponenets trail segment
         } else if (this.type === "opponentTrailDisable") {
             let opponentTrail = opponent === this.scene.bike ? this.scene.trailGroup1 : this.scene.trailGroup2;
             opponentTrail.setAlpha(0); // Hide opponent's trail
@@ -54,7 +61,6 @@ class PowerUp extends Phaser.Physics.Arcade.Sprite {
                 opponentTrail.setAlpha(1); // Restore visibility after time
             });
         }
-
         this.destroy();
     }
 }

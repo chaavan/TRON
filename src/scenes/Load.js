@@ -4,13 +4,20 @@ class Load extends Phaser.Scene{
     }
 
     preload(){
+        // Path
         this.load.path = './assets/'
+
+        // Background-imgs
         this.load.image('background', 'img/Background.png')
         this.load.image('menu-background', 'img/menu-background.png')
+
+        // Power-ups
         this.load.image('speedBoost', 'img/speedBoost.png')
         this.load.image('opponentTrailDisable', 'img/trailDisable.png')
         this.load.image('trailInvincibility', 'img/invincibility.png')
         this.load.image('trailElongation', 'img/trailElong.png')
+
+        // Buttons
         this.load.image('playButton', 'img/PlayButton.png')
         this.load.image('instructionsButton', 'img/InstructionsButton.png')
         this.load.image('creditsButton', 'img/CreditsButton.png')
@@ -18,14 +25,20 @@ class Load extends Phaser.Scene{
         this.load.image('AIButton', 'img/AIButton.png')
         this.load.image('playerButton', 'img/PlayerButton.png')
         this.load.image('RetryButton', 'img/RetryButton.png')
+
+        // Supporting-imgs
         this.load.image('arrows', 'img/arrows.png')
         this.load.image('WASD', 'img/wasd.png')
+
+        // Audio
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.audio('IGMusic', 'audio/In-game-music.mp3')
         this.load.audio('countdown', 'audio/countdown.mp3')
         this.load.audio('explosion', 'audio/explosion1.mp3')
         this.load.audio('collect', 'audio/collect.mp3')
+
+        // Bike
         this.load.spritesheet('bike-left', 'img/Bike-left.png',{
             frameWidth: 64,
             frameHeight: 64
@@ -55,6 +68,7 @@ class Load extends Phaser.Scene{
     }
 
     create(){
+        // Bike animations
         this.anims.create({
             key: 'left',
             frameRate: 8,

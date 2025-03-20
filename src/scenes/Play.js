@@ -4,17 +4,18 @@ class Play extends Phaser.Scene {
     }
 
     create(){
-        //Stop all music
+        // Pause music
         this.sound.stopByKey("BGMusic");
 
         //Background
         let backgroundIMG = this.add.image(width/2, height/2, 'background')
-        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.2).setOrigin(0.5);
-
-        this.physics.world.setBounds(82, 125, 855, 350)
-
         backgroundIMG.setOrigin(0.5);
         backgroundIMG.setScale(1.2)
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.2).setOrigin(0.5);
+
+        // Adjust world boundries to image boundries
+        this.physics.world.setBounds(82, 125, 855, 350)
+
         this.countdownActive = true
 
         this.collisionOccurred = false
@@ -60,7 +61,7 @@ class Play extends Phaser.Scene {
 
 
         // Trail Management
-        // **Physics Groups for Trails**
+        // Physics Groups for Trails
         this.trailGroup1 = this.physics.add.group();
         this.trailGroup2 = this.physics.add.group();
 
@@ -149,6 +150,7 @@ class Play extends Phaser.Scene {
     }
 
     spawnPowerUp() {
+        // Random coordinates generation
         let x = Phaser.Math.Between(102, 82 + 835);
         let y = Phaser.Math.Between(145, 125 + 330);
         let type = Phaser.Utils.Array.GetRandom(this.powerUpTypes);
@@ -210,12 +212,11 @@ class Play extends Phaser.Scene {
 
         let duration = Date.now() - this.startTime;
 
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(3000, () => {
             this.cameras.main.fadeOut(1000); // Fade out before restarting
             this.time.delayedCall(1000, () => {
                 this.scene.start("gameOverScene", {duration: duration});
             });
         });
     }
-  
 }

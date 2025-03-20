@@ -8,11 +8,11 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
     // Determine if this is an AI bike
     this.isAI = (controls === null);
 
-    // Store the intended starting direction (after countdown)
+    // Store the intended starting direction
     this.initialDirection = initialDirection;
     this.adjustBodySize(initialDirection);
 
-    // Speed at which the bike moves (in pixels per second)
+    // Speed at which the bike moves
     this.bikeVelocity = 100;
 
     this.keys = controls || {};
@@ -43,9 +43,9 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
   adjustBodySize(direction) {
     this.currentDirection = direction;
     if (direction === "up" || direction === "down") {
-        this.body.setSize(this.width / 2 - 5, this.height - 15, true); // Narrow hitbox for vertical movement
+      this.body.setSize(this.width / 2 - 5, this.height - 15, true); // Narrow hitbox for vertical movement
     } else if (direction === "left" || direction === "right") {
-        this.body.setSize(this.width - 15, this.height / 2 - 5, true); // Wider hitbox for horizontal movement
+      this.body.setSize(this.width - 15, this.height / 2 - 5, true); // Wider hitbox for horizontal movement
     }
   }
 }
@@ -63,8 +63,8 @@ class IdleState extends State {
   exit(scene, bike) {
     // Clean up the timer when leaving the idle state.
     if (bike.idleTimer) {
-        bike.idleTimer.remove();
-        bike.idleTimer = null;
+      bike.idleTimer.remove();
+      bike.idleTimer = null;
     }
   }
 }
@@ -89,7 +89,6 @@ class LeftState extends State {
         return;
       }
     }
-    // Continue moving left.
   }
 }
   
