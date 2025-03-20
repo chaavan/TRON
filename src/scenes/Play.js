@@ -9,7 +9,9 @@ class Play extends Phaser.Scene {
 
         //Background
         let backgroundIMG = this.add.image(width/2, height/2, 'background')
-        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.1).setOrigin(0.5);
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.15).setOrigin(0.5);
+
+        this.physics.world.setBounds(82, 125, 855, 350)
 
         backgroundIMG.setOrigin(0.5);
         backgroundIMG.setScale(1.2)
@@ -60,6 +62,8 @@ class Play extends Phaser.Scene {
         this.trailGroup1 = this.physics.add.group();
         this.trailGroup2 = this.physics.add.group();
 
+        this.bike.body.onWorldBounds = true;
+
         // Prevent instant self-collision
         this.ignoreSelfCollisionFrames = 15;
         this.framesSinceStart = 0;
@@ -85,6 +89,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.bike, this.bike2, () => {
             this.handleCollision("Both Players Crashed!", this.bike, this.bike2);
         }, null, this);
+        
         // Game over flag
         this.gameOver = false;
 
@@ -142,8 +147,8 @@ class Play extends Phaser.Scene {
     }
 
     spawnPowerUp() {
-        let x = Phaser.Math.Between(50, this.game.config.width - 50);
-        let y = Phaser.Math.Between(50, this.game.config.height - 50);
+        let x = Phaser.Math.Between(102, 82 + 835);
+        let y = Phaser.Math.Between(145, 125 + 330);
         let type = Phaser.Utils.Array.GetRandom(this.powerUpTypes);
     
         let powerUp = new PowerUp(this, x, y, type);
