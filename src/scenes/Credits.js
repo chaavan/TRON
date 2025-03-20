@@ -5,30 +5,30 @@ class Credits extends Phaser.Scene {
 
     create() {
         // Background
-        this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
+        this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Title
         this.add.bitmapText(525, 75, 'Tron',  'Game Credits', 64).setOrigin(0.5);
 
         // Credit Text
-        let creditText = `Game Design & Programming:
-Chaavan
+        let creditText = `  Game Design & Programming:
+    Tron "legacy" / Chaavan
 
-Assets & Art:
-Chaavan
+    Assets & Art:
+    Chaavan, SUWALLS Wallpapers
 
-Music & Sound Effects:
-Chaavan
+    Music & Sound Effects:
+    Chaavan, pixabay.com
 
-Made for CMPM 120
-Instructor: Nathan Altice
+    Made for CMPM 120
+    Instructor: Nathan Altice
 
-Powered by Phaser 3`;
+    Powered by Phaser 3`;
 
-        this.add.text(this.scale.width / 2, 325, creditText, {
+        this.add.text(this.scale.width / 2, 305, creditText, {
             fontSize: "18px",
-            fill: "#fff",
+            fill: "#F0C696",
             fontFamily: "Arial",
             align: "center",
             lineSpacing: 8

@@ -11,7 +11,7 @@ class GameOver extends Phaser.Scene {
         //Stop all music
         this.sound.stopAll()
 
-        this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
+        this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Check if background music is already playing.

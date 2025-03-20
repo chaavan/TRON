@@ -22,7 +22,7 @@ class Instructions extends Phaser.Scene {
             this.backgroundMusic = bgMusic;
         }
         
-        this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
+        this.add.image(width/2, height/2, 'menu-background').setScale(0.8)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
         // Title text
@@ -30,16 +30,20 @@ class Instructions extends Phaser.Scene {
 
         // Instructions text
         const instructionsText = `
-Game Instructions:
+    Use Arrow Keys to control Player 1’s bike.
+    Use W, A, S, D to control Player 2’s bike.
 
-1. Control your bike using the arrow keys (for one bike) or WASD (for the other).
-2. Your bike will move continuously (like in Snake) you can only change direction.
-3. Avoid colliding with the light trails left by the bikes.
-4. Beware of hitting world boundaries.
-5. Collect power-ups to boost your performance.
-6. The last bike remaining wins the battle.
+    Avoid colliding with the arena walls or bike trails.
+    
+    Collect power-ups for special abilities:
+       - Speed Boost: Increase bike speed temporarily.
+       - Trail Invincibility: Pass through trails without collision.
+       - Trail Elongation: Extend your trail (with brief invincibility).
+       - Opponent Trail Disable: Temporarily disable opponent’s trail.
 
-Press "Back to Menu" to return.
+    The last bike remaining wins!
+
+    Press "Menu" to return.
         `;
         this.add.text(this.scale.width / 2, this.scale.height / 2, instructionsText, {
             fontFamily: 'Arial',
