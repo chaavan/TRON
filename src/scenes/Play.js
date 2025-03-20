@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     create(){
         //Stop all music
         this.sound.stopByKey("BGMusic");
-        
+
         //Background
         this.add.image(400, 215, 'background').setScale(1.6)
 
@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         
         new Countdown(this, this.scale.width / 2, this.scale.height / 2, () =>{
             this.countdownActive = false
+            this.startTime = Date.now();
         })
 
         // Check if background music is already playing.
@@ -31,15 +32,10 @@ class Play extends Phaser.Scene {
         }
 
         let gameMode = this.registry.get("gameMode");
+        this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'calcio-italiano', 'Time: 0:00', 24).setOrigin(0, 0);
         
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);
-        // this.bike2 = new Bike(this, 100, height / 2, 'bike-idle', 0, 'right', this.input.keyboard.addKeys({
-        //   up: Phaser.Input.Keyboard.KeyCodes.W,
-        //   left: Phaser.Input.Keyboard.KeyCodes.A,
-        //   down: Phaser.Input.Keyboard.KeyCodes.S,
-        //   right: Phaser.Input.Keyboard.KeyCodes.D
-        // })).setAngle(90);
 
         if (gameMode === "AI") {
             // AI-controlled bike
@@ -126,6 +122,15 @@ class Play extends Phaser.Scene {
         this.bike.update(time, delta);
         this.bike2.update(time, delta);
 
+        if (!this.countdownActive && this.startTime) {
+            let elapsed = Date.now() - this.startTime;
+            let totalSeconds = Math.floor(elapsed / 1000);
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = totalSeconds % 60;
+            let formattedTime = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+            this.elapsedText.setText("Time: " + formattedTime);
+        }
+
         this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y, 0xff0000); // Red Trail (Player 1)
         this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
 
@@ -195,10 +200,12 @@ class Play extends Phaser.Scene {
             fill: '#fff',
         }).setOrigin(0.5);
 
+        let duration = Date.now() - this.startTime;
+
         this.time.delayedCall(2000, () => {
             this.cameras.main.fadeOut(1000); // Fade out before restarting
             this.time.delayedCall(1000, () => {
-                this.scene.start("gameOverScene");
+                this.scene.start("gameOverScene", {duration: duration});
             });
         });
     }

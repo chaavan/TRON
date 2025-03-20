@@ -3,10 +3,14 @@ class GameOver extends Phaser.Scene {
         super('gameOverScene');
     }
 
+    init(data) {
+        this.duration = data.duration || 0;
+    }
+
     create() {
         //Stop all music
         this.sound.stopAll()
-        
+
         this.add.image(width/2, height/2, 'menu-background').setScale(0.3)
         this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.7).setOrigin(0.5);
 
@@ -28,8 +32,17 @@ class GameOver extends Phaser.Scene {
             this.backgroundMusic = bgMusic;
         }
 
+        // Calculate minutes and seconds from the duration (in ms)
+        let totalSeconds = Math.floor(this.duration / 1000);
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = totalSeconds % 60;
+        let formattedTime = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+
         // Display "Game Over" title text.
-        this.add.bitmapText(525, 150, 'calcio-italiano',  'Game Over', 64).setOrigin(0.5);
+        this.add.bitmapText(525, 150, 'Tron',  'Game Over', 64).setOrigin(0.5);
+
+        //Display time
+        this.add.bitmapText(525, 250, 'Tron', 'Time Played : ' + formattedTime, 32).setOrigin(0.5);
 
         // Create a "Retry" button.
         const retryText = this.add.text(this.scale.width / 2, 350, 'Retry', {

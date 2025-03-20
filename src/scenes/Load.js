@@ -11,6 +11,7 @@ class Load extends Phaser.Scene{
         this.load.image('opponentTrailDisable', 'img/trailDisable.png')
         this.load.image('trailInvincibility', 'img/invincibility.png')
         this.load.image('trailElongation', 'img/trailElong.png')
+        this.load.image('play', 'img/PlayButton.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.audio('IGMusic', 'audio/In-game-music.mp3')
