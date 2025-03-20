@@ -18,6 +18,8 @@ class Load extends Phaser.Scene{
         this.load.image('AIButton', 'img/AIButton.png')
         this.load.image('playerButton', 'img/PlayerButton.png')
         this.load.image('RetryButton', 'img/RetryButton.png')
+        this.load.image('arrows', 'img/arrows.png')
+        this.load.image('WASD', 'img/wasd.png')
         this.load.audio('BGMusic', 'audio/background-music.mp3')
         this.load.audio('click', 'audio/click.mp3')
         this.load.audio('IGMusic', 'audio/In-game-music.mp3')
@@ -48,7 +50,7 @@ class Load extends Phaser.Scene{
             frameWidth: 64,
             frameHeight: 64
         })
-        this.load.bitmapFont('calcio-italiano', 'fonts/CalcioItaliano.png', 'fonts/CalcioItaliano.xml')
+        this.load.bitmapFont('content', 'fonts/Tron-content.png', 'fonts/Tron-content.xml')
         this.load.bitmapFont('Tron', 'fonts/TRON.png', 'fonts/TRON.xml')
     }
 
@@ -89,6 +91,6 @@ class Load extends Phaser.Scene{
             repeat: 0,
             frames: this.anims.generateFrameNumbers('bike-explode', {start: 0, end: 3}),
         })
-        this.scene.start('menuScene')
+        this.scene.start('instructionsScene')
     }
 }

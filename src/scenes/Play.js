@@ -9,7 +9,7 @@ class Play extends Phaser.Scene {
 
         //Background
         let backgroundIMG = this.add.image(width/2, height/2, 'background')
-        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.15).setOrigin(0.5);
+        this.add.rectangle(width/2, height/2, 1024, 600, 0x000000, 0.2).setOrigin(0.5);
 
         this.physics.world.setBounds(82, 125, 855, 350)
 
@@ -37,7 +37,7 @@ class Play extends Phaser.Scene {
         }
 
         let gameMode = this.registry.get("gameMode");
-        this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'Tron', 'Time: 0:00', 32).setOrigin(0, 0);
+        this.elapsedText = this.add.bitmapText(this.game.config.width - 200, 20, 'content', 'Time: 0:00', 32).setOrigin(0, 0);
         
         //Add bikes
         this.bike = new Bike(this, width - 100, height / 2, 'bike-idle', 0, 'left', this.input.keyboard.createCursorKeys()).setAngle(270);
@@ -89,7 +89,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.bike, this.bike2, () => {
             this.handleCollision("Both Players Crashed!", this.bike, this.bike2);
         }, null, this);
-        
+
         // Game over flag
         this.gameOver = false;
 
