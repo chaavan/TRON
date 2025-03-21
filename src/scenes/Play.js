@@ -155,7 +155,7 @@ class Play extends Phaser.Scene {
         let type = Phaser.Utils.Array.GetRandom(this.powerUpTypes);
     
         let powerUp = new PowerUp(this, x, y, type);
-        console.log(type)
+        // console.log(type)
         this.powerUpGroup.add(powerUp);
     }
 
@@ -180,6 +180,10 @@ class Play extends Phaser.Scene {
         if(color != null){
             trailSegment.setTint(color)
         }
+
+        // Hide the new trail segments  
+        trailSegment.setAlpha(0);
+
         this.physics.add.existing(trailSegment);
         trailSegment.body.setImmovable(true);
         
@@ -187,9 +191,10 @@ class Play extends Phaser.Scene {
         trailSegment.body.checkCollision.none = true;
     
         // Enable collision after 200ms
-        this.time.delayedCall(500, () => {
+        this.time.delayedCall(350, () => {
             if (!this.countdownActive && trailSegment.body) {
                 trailSegment.body.checkCollision.none = false;
+                trailSegment.setAlpha(1);
             }
         });
     

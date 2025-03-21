@@ -43,9 +43,9 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
   adjustBodySize(direction) {
     this.currentDirection = direction;
     if (direction === "up" || direction === "down") {
-      this.body.setSize(this.width / 2 - 5, this.height - 15, true); // Narrow hitbox for vertical movement
+      this.body.setSize(this.width - 5, this.height / 1.5 - 15, true); // Narrow hitbox for vertical movement
     } else if (direction === "left" || direction === "right") {
-      this.body.setSize(this.width - 15, this.height / 2 - 5, true); // Wider hitbox for horizontal movement
+      this.body.setSize(this.width - 15, this.height - 5, true); // Wider hitbox for horizontal movement
     }
   }
 }
