@@ -181,7 +181,7 @@ class Menu extends Phaser.Scene {
         // Recreate the original Play button image.
         this.createPlayButton();
         this.enableOtherButtons();
-        });
+        }).setTint(0xF79D1E99)
         
         // Hover effects for the game mode option images and back button.
         playVsAI.on("pointerover", () => {

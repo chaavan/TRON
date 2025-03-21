@@ -53,8 +53,14 @@ class Bike extends Phaser.Physics.Arcade.Sprite {
 class IdleState extends State {
   enter(scene, bike) {
     bike.setVelocity(0, 0);
-    bike.anims.play('idle', true);
 
+    if(bike.initialDirection === "left"){
+      bike.setAngle(0)
+      bike.anims.play('left', true); // Appropriate animation
+    } else {
+      bike.setAngle(0)
+      bike.anims.play('right', true); // Appropriate animation
+    }
     // Start a 3-second countdown. After countdown, transition to the bike's initial movement state.
     bike.idleTimer = scene.time.delayedCall(3000, () => {
       this.stateMachine.transition(bike.initialDirection);
@@ -71,10 +77,10 @@ class IdleState extends State {
   
 class LeftState extends State {
   enter(scene, bike) {
-    bike.setAngle(270); // Bike's facing direction
+    bike.setAngle(0); // Bike's facing direction
     bike.direction = 'left';
     bike.setVelocity(-bike.bikeVelocity, 0); // Bike speed
-    bike.anims.play('left', true); // Appropriate animation
+    bike.anims.play('left', true);
     bike.adjustBodySize("left");
   }
   execute(scene, bike) {
@@ -94,7 +100,7 @@ class LeftState extends State {
   
 class RightState extends State {
   enter(scene, bike) {
-    bike.setAngle(90);
+    bike.setAngle(0);
     bike.direction = 'right';
     bike.setVelocity(bike.bikeVelocity, 0);
     bike.anims.play('right', true);
@@ -120,7 +126,8 @@ class UpState extends State {
     bike.setAngle(0);
     bike.direction = 'up';
     bike.setVelocity(0, -bike.bikeVelocity);
-    // bike.anims.play('up', true);
+    bike.anims.play('up', true);
+    bike.setScale(0.80);
     bike.adjustBodySize("up");
   }
   execute(scene, bike) {
@@ -140,10 +147,11 @@ class UpState extends State {
   
 class DownState extends State {
   enter(scene, bike) {
-    bike.setAngle(180);
+    bike.setAngle(0);
     bike.direction = 'down';
     bike.setVelocity(0, bike.bikeVelocity);
-    // bike.anims.play('down', true);
+    bike.anims.play('down', true);
+    bike.setScale(0.80);
     bike.adjustBodySize("down");
   }
   execute(scene, bike) {

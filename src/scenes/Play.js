@@ -59,7 +59,6 @@ class Play extends Phaser.Scene {
         }
         this.bike2.setTint(0xff0000)
 
-
         // Trail Management
         // Physics Groups for Trails
         this.trailGroup1 = this.physics.add.group();
@@ -142,8 +141,8 @@ class Play extends Phaser.Scene {
             this.elapsedText.setText("Time: " + formattedTime);
         }
 
-        this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y, 0xff0000); // Red Trail (Player 1)
-        this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y, 0x00ff00); // Green Trail (Player 2)
+        this.addTrailSegment(this.trailGroup1, this.bike.x, this.bike.y); // Blue Trail (Player 1)
+        this.addTrailSegment(this.trailGroup2, this.bike2.x, this.bike2.y, 0xff0303); // Green Trail (Player 2)
 
         // Delay self-collision checks
         this.framesSinceStart++;
@@ -176,8 +175,11 @@ class Play extends Phaser.Scene {
         });
     }
 
-    addTrailSegment(trailGroup, x, y, color) {
-        let trailSegment = this.add.rectangle(x, y, 4, 4, color);
+    addTrailSegment(trailGroup, x, y, color = null) {
+        let trailSegment = this.add.image(x, y, "trail")
+        if(color != null){
+            trailSegment.setTint(color)
+        }
         this.physics.add.existing(trailSegment);
         trailSegment.body.setImmovable(true);
         
