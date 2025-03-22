@@ -14,7 +14,7 @@ class Load extends Phaser.Scene{
         // Power-ups
         this.load.image('speedBoost', 'img/speedBoost.png')
         this.load.image('opponentTrailDisable', 'img/trailDisable.png')
-        this.load.image('trailInvincibility', 'img/invincibility.png')
+        this.load.image('trailInvincibility', 'img/Invincibility.png')
         this.load.image('trailElongation', 'img/trailElong.png')
 
         // Buttons
